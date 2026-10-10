@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lo state preparation — quick reference</title>
+  <link rel="stylesheet" href="../assets/teaching.css">
+</head>
+<body>
+<main>
+  <nav aria-label="Reference navigation"><a href="../lessons/0001-lo-state-preparation.html">Return to lesson</a><a href="../glossary.html">Shared glossary</a></nav>
+  <div class="eyebrow">Reference 01</div>
+  <h1>Preparing the D(S₃) ground state</h1>
+  <p class="lede">Z₃ toric code → gauge Z₂ charge conjugation → D(S₃).</p>
+  <table>
+    <caption class="caption">Experimental preparation routes in Lo et al.</caption>
+    <thead><tr><th scope="col">Step</th><th scope="col">Unitary</th><th scope="col">Adaptive</th></tr></thead>
+    <tbody>
+      <tr><th scope="row">Z₃ stage</th><td>Unitary vertex construction</td><td>Unitary dual plaquette construction</td></tr>
+      <tr><th scope="row">Z₂ gauging</th><td>Fresh data qubit controls entangling gates</td><td>Vertex ancillas entangle, then X measurement</td></tr>
+      <tr><th scope="row">Constraint signs</th><td>Coherently prepare +1</td><td>Conditional edge-Z correction</td></tr>
+      <tr><th scope="row">Main dependency</th><td>Ordered fresh representatives</td><td>Measured signs and classical correction paths</td></tr>
+    </tbody>
+  </table>
+  <p class="caption">Source: <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=14">Supplement S6A–B</a>.</p>
+  <div class="formula">
+    <span>C|0⟩ = |0⟩; C|1⟩ = |2⟩; C|2⟩ = |1⟩</span>
+    <span>S = X<sub>q</sub>T; P₊ = (I + S)/2</span>
+    <span>|ψ₊⟩ = (|0⟩|φ⟩ + |1⟩T|φ⟩)/√2</span>
+  </div>
+  <p>An edge-Z flips two adjacent vertex signs. A path flips its endpoints; interior flips cancel. <a href="https://arxiv.org/html/2112.03061v2#A4">Preparation theory, Appendix D</a>.</p>
+  <p>The local unitary identity requires a fresh |0⟩ data qubit. See the <a href="../lessons/0001-lo-state-preparation.html#identity">worked derivation</a> and <a href="../lessons/0001-lo-state-preparation.html#practice">correction exercise</a>.</p>
+  <footer><p class="caption">The two experiments begin in different logical states; matching local ground-state constraints does not choose a unique torus state. <a href="https://www.nature.com/articles/s41586-026-10709-y/figures/7">Extended Data Fig. 2</a>.</p></footer>
+</main>
+</body>
+</html>

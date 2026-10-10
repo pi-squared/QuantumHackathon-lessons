@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A short lesson on the unitary and adaptive preparation routes in Lo et al., with a worked projector identity and an interactive correction exercise.">
+  <title>Two ways to prepare Lo’s D(S₃) state</title>
+  <link rel="stylesheet" href="../assets/teaching.css">
+  <script src="../assets/lesson-widgets.js" defer></script>
+  <script src="../assets/vertex-signs.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#lesson">Skip to lesson</a>
+<main id="lesson">
+  <nav aria-label="Lesson navigation">
+    <a href="../reference/lo-state-preparation.html">Quick reference</a>
+    <a href="../glossary.html">Shared glossary</a>
+    <a href="#practice">Practice</a>
+  </nav>
+  <header>
+    <div class="eyebrow">Lesson 01 · about 6 minutes</div>
+    <h1>Two ways to prepare the same kind of topological order</h1>
+    <p class="lede">The question to keep in mind: <strong>how do you make a local gauge constraint hold with certainty?</strong> One route measures its sign and corrects it. The other builds the right superposition coherently.</p>
+    <p class="caption">Learning aim: explain what changes between the two preparation methods in Lo et al., <em>Universal gates from braiding and fusing anyons on quantum hardware</em>.</p>
+  </header>
+
+  <div class="pipeline" aria-label="Preparation stages">
+    <span>Product state</span> → <span>Z₃ toric code</span> → <span>gauge charge conjugation</span> → <span>D(S₃)</span>
+  </div>
+  <p>A qutrit carries a three-valued label <em>a</em>; a qubit carries a two-valued label <em>b</em>. Charge conjugation reverses the qutrit label: C|a⟩ = |−a mod 3⟩. Thus |0⟩ stays fixed and |1⟩ exchanges with |2⟩. Promoting this global symmetry to a local gauge symmetry produces the S₃ quantum double. <a href="https://arxiv.org/html/2112.03061v2#A4">Theory, Appendix D</a>.</p>
+  <p>A ground state obeys every vertex and plaquette projector: <span class="nowrap">Aᵥ|ψ⟩ = Bₚ|ψ⟩ = |ψ⟩</span>. These impose no electric charge and no local magnetic flux. On a torus, local constraints leave several possible logical sectors. <a href="https://arxiv.org/pdf/2502.14974#page=7">Lo et al.’s pedagogical notes, §2.1</a>.</p>
+
+  <section id="routes">
+    <h2>What they actually did</h2>
+    <p>Both experimental routes prepared Z₃ <strong>unitarily</strong>. The main route starts qutrits in |0⟩ and enforces vertices using fresh representatives in |+₃⟩ and controlled shifts CX/CX†. The adaptive comparison uses the dual plaquette construction, starting from |+₃⟩. <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=14">Supplement, S6A</a>.</p>
+    <div class="columns">
+      <article class="route unitary">
+        <div class="eyebrow">Unitary · S6B2</div>
+        <h3>Build each constraint</h3>
+        <p>Choose a fresh |0⟩ edge qubit. Apply H, then use it to control X on three neighboring edge qubits and C on two qutrits. Repeat in the prescribed order.</p>
+        <p class="caption">The representative stays in the data register. The fresh-|0⟩ requirement creates the ordering dependency.</p>
+      </article>
+      <article class="route adaptive">
+        <div class="eyebrow">Adaptive · S6B1</div>
+        <h3>Measure, then correct</h3>
+        <p>Prepare auxiliary vertex qubits in |+⟩. Couple each to two qutrits by controlled C and neighboring |0⟩ edge qubits by CNOT. Measure vertex qubits in X; use the signs to choose edge-Z corrections.</p>
+        <p class="caption">The vertex ancillas are measured out. Corrections resolve the random signs.</p>
+      </article>
+    </div>
+    <p class="caption">Source: <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=15">S6B, equations S56–S64 and Fig. 4</a>. |+₃⟩ = (|0⟩ + |1⟩ + |2⟩)/√3; |+⟩ = (|0⟩ + |1⟩)/√2.</p>
+  </section>
+
+  <section id="identity">
+    <h2>Why the unitary replacement works</h2>
+    <p>Here is a local algebraic derivation of the identity behind S64. Write the dressed vertex generator as S = X<sub>q</sub>T, where T acts on the remaining degrees of freedom and T² = I. Its desired projector is P₊ = (I + S)/2. Let |φ⟩ denote the rest of the state.</p>
+    <div class="formula">
+      <span>|0⟩<sub>q</sub>|φ⟩ <small>→ H on q → controlled T →</small></span>
+      <span>|ψ₊⟩ = (|0⟩|φ⟩ + |1⟩T|φ⟩)/√2</span>
+    </div>
+    <p>Apply S to this expression. X swaps |0⟩ and |1⟩; T turns T|φ⟩ back into |φ⟩. The two terms exchange, so S|ψ₊⟩ = |ψ₊⟩. You have prepared the +1 eigenspace directly.</p>
+    <p>An ancilla measurement would instead give a branch proportional to (I ± S)|0⟩|φ⟩. The minus branch has a minus sign between the same two terms; Z on q removes it. The fresh |0⟩ qubit makes these branches equally weighted and supplies the control used by the unitary replacement.</p>
+    <p class="aside">This proves one local preparation step. Preparing the whole lattice also needs a legal ordering that preserves the constraints already established. The experiment supplies that ordering in Fig. 4.</p>
+    <p class="caption">Original worked derivation using the operator and circuit in <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=18">S63–S64</a>.</p>
+  </section>
+
+  <section id="practice">
+    <h2>Make the correction yourself</h2>
+    <p>Z anticommutes with the X in an incident vertex generator. One edge-Z therefore flips two adjacent vertex signs. Along a path, interior vertices flip twice; only the endpoints change. This is the sign arithmetic behind pairing unwanted charges. <a href="https://arxiv.org/html/2112.03061v2#A4">Preparation theory, Appendix D</a>.</p>
+    <div class="exercise" data-vertex-signs>
+      <p><strong>Task:</strong> A and C have sign −1. Choose edges until all four signs are +1.</p>
+      <svg class="sign-board" viewBox="0 0 360 280" role="img" aria-labelledby="board-title board-description">
+        <title id="board-title">Four-vertex correction exercise</title>
+        <desc id="board-description" data-board-description>A: −1; B: +1; C: −1; D: +1.</desc>
+        <line x1="70" y1="55" x2="290" y2="55" data-line="0"></line>
+        <line x1="290" y1="55" x2="290" y2="225" data-line="1"></line>
+        <line x1="290" y1="225" x2="70" y2="225" data-line="2"></line>
+        <line x1="70" y1="225" x2="70" y2="55" data-line="3"></line>
+        <circle cx="70" cy="55" r="28" class="negative" data-circle="0"></circle>
+        <circle cx="290" cy="55" r="28" data-circle="1"></circle>
+        <circle cx="290" cy="225" r="28" class="negative" data-circle="2"></circle>
+        <circle cx="70" cy="225" r="28" data-circle="3"></circle>
+        <text x="70" y="62" font-size="23" data-sign="0">−1</text>
+        <text x="290" y="62" font-size="23" data-sign="1">+1</text>
+        <text x="290" y="232" font-size="23" data-sign="2">−1</text>
+        <text x="70" y="232" font-size="23" data-sign="3">+1</text>
+        <text x="70" y="17" font-size="17">A</text>
+        <text x="290" y="17" font-size="17">B</text>
+        <text x="290" y="272" font-size="17">C</text>
+        <text x="70" y="272" font-size="17">D</text>
+      </svg>
+      <div class="controls" role="group" aria-label="Select edge Z corrections">
+        <button type="button" data-edge="0" aria-pressed="false">Z on AB</button>
+        <button type="button" data-edge="1" aria-pressed="false">Z on BC</button>
+        <button type="button" data-edge="2" aria-pressed="false">Z on CD</button>
+        <button type="button" data-edge="3" aria-pressed="false">Z on DA</button>
+        <button type="button" data-reset>Reset</button>
+      </div>
+      <p class="caption" data-correction-list>No Z corrections selected.</p>
+      <p class="feedback" data-sign-feedback role="status" aria-live="polite">Choose a path connecting A to C.</p>
+      <p class="caption">Toy graph showing sign bookkeeping only. It omits the qutrits and flux projectors; it is not a simulation of the paper’s lattice.</p>
+      <noscript><p>For example, Z on AB flips A and B; Z on BC then flips B and C. All four signs become +1.</p></noscript>
+    </div>
+    <p>Once a correction path is known, its Z gates act on separate edge qubits and can form one parallel layer. The classical choice of that path can still depend on distant measurement results.</p>
+
+    <form class="quiz" data-quiz data-answer="z" data-explanation="Use the measured signs to choose a string of edge-Z gates that removes the unwanted signs.">
+      <fieldset>
+        <legend>What removes the unwanted measurement signs?</legend>
+        <label><input type="radio" name="correction" value="x">Repeated X measurements</label>
+        <label><input type="radio" name="correction" value="z">Conditional Z gates</label>
+        <label><input type="radio" name="correction" value="discard">Discarding negative results</label>
+      </fieldset>
+      <button type="submit">Check answer</button>
+      <p class="feedback" role="status" aria-live="polite"></p>
+    </form>
+    <form class="quiz" data-quiz data-answer="zero" data-explanation="Select a fresh |0⟩ representative; H creates its superposition before the controlled entangling gates.">
+      <fieldset>
+        <legend>What must the unitary representative start as?</legend>
+        <label><input type="radio" name="representative" value="zero">|0⟩ before selection</label>
+        <label><input type="radio" name="representative" value="one">|1⟩ before selection</label>
+        <label><input type="radio" name="representative" value="plus">|+⟩ before selection</label>
+      </fieldset>
+      <button type="submit">Check answer</button>
+      <p class="feedback" role="status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <section id="comparison">
+    <h2>What to remember when comparing them</h2>
+    <p>The adaptive experiment used a different initial logical state: a Z₃ X-logical eigenstate, whereas the main preparation chose trivial flux. Its fidelity estimate concerns the ground-state manifold. <a href="https://www.nature.com/articles/s41586-026-10709-y/figures/7">Extended Data Fig. 2</a>.</p>
+    <p>Parallel ancilla preparation and measurement permit bounded quantum depth for gauging. The unitary dependency chain grows with lattice length. A fully constant-depth preparation would also need an adaptive Z₃ stage, unlike the implemented comparison. Classical communication and available ancillas matter when turning quantum depth into elapsed time. <a href="https://arxiv.org/html/2112.03061v2#A4">Theory, Appendix D</a>; <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=14">S6A–C</a>.</p>
+    <p>Recall it tomorrow without looking: <em>What is shared? Which qubit gets measured? Why does the unitary route need an ordered sequence?</em> Then use the <a href="../reference/lo-state-preparation.html">quick reference</a> to check your explanation.</p>
+  </section>
+
+  <footer>
+    <p><strong>Primary reading:</strong> <a href="https://media.springernature.com/original/springer-static/esm/art%3A10.1038%2Fs41586-026-10709-y/MediaObjects/41586_2026_10709_MOESM1_ESM.pdf#page=14">Supplementary Information S6, PDF pages 14–18</a> (printed pages 13–17). Start with Fig. 4 and S64, then read S6B1.</p>
+    <p class="caption">Ask the agent any follow-up question, especially about gauging, controlled C, or why Z changes a stabilizer sign. This lesson presents a worked explanation; completing the exercises is how we check understanding.</p>
+  </footer>
+</main>
+</body>
+</html>
